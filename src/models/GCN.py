@@ -10,9 +10,16 @@ class GCN(nn.Module):
         self.gcn2 = GCNLayer(hidden_dim, output_dim)
         self.dropout = dropout
 
-    def forward(self, X, A_hat):
+    def forward(self, X, A_hat, return_embeddings = False):
         X = self.gcn1(X, A_hat)
         X = F.relu(X)
+        
+        embeddings = X
+
+
         X = F.dropout(X, p=self.dropout, training=self.training)
-        X = self.gcn2(X, A_hat)
-        return X
+        logits = self.gcn2(X, A_hat)
+
+        if return_embeddings:
+            return logits, embeddings
+        return logits
