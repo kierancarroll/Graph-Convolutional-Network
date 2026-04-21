@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 
-def visualize_embeddings(model, x, y, test_mask, A_hat_torch):
+def visualize_embeddings(model, x, y, test_mask, A_hat_torch, dataset):
   model.eval()
   with torch.no_grad():
     logits, embeddings = model(x, A_hat_torch, return_embeddings = True)
@@ -33,5 +33,5 @@ def visualize_embeddings(model, x, y, test_mask, A_hat_torch):
         cmap="tab10",
         s=10
     )
-    plt.title("t-SNE of GCN Embeddings Full Model")
+    plt.title(f"t-SNE of GCN Embeddings L2 Model on {dataset} dataset")
     plt.show()
