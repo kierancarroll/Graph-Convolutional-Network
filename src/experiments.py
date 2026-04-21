@@ -1,4 +1,5 @@
 import yaml
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 from src.models.GCN import GCN
@@ -86,5 +87,30 @@ def experiments(x,y, num_features, num_classes, train_mask, val_mask, test_mask,
         results["full"]["train_loss"].append(train_loss)
         results["full"]["val_acc"].append(val_acc)
         results["full"]["test_acc"].append(test_acc)
+
+    print("===== Experiment Summary (Mean ± Std over runs) =====")
+    
+    for exp_name, metrics in results.items():
+        
+        train_losses = np.array([run[-1] for run in metrics["train_loss"]])  # final epoch loss
+        val_accs = np.array([run[-1] for run in metrics["val_acc"]])        # final val acc
+        test_accs = np.array(metrics["test_acc"])                           # single value per run
+
+
+        # Compute stats
+        train_loss_mean = train_losses.mean()
+        train_loss_std = train_losses.std()
+
+        val_acc_mean = val_accs.mean()
+        val_acc_std = val_accs.std()
+
+        test_acc_mean = test_accs.mean()
+        test_acc_std = test_accs.std()
+
+        print(f"{exp_name.upper()}:")
+        print(f"  Train Loss: {train_loss_mean:.4f} ± {train_loss_std:.4f}")
+        print(f"  Val Acc:    {val_acc_mean:.4f} ± {val_acc_std:.4f}")
+        print(f"  Test Acc:   {test_acc_mean:.4f} ± {test_acc_std:.4f}")
+        print()
 
     return results
