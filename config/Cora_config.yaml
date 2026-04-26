@@ -1,0 +1,9 @@
+training:
+  n_runs: 1
+  epochs: 100
+  lr: 0.01
+
+model:
+  hidden_dim: 32
+  dropout: 0.5
+
